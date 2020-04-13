@@ -31,7 +31,6 @@ public class TP90Listener implements UpdateListener {
 		}
 		Map<String,Double> methodNameCountTp90 = new HashMap<String,Double>();
 		for(Map.Entry<String,Integer> entry:methodNameCount.entrySet()) {
-			System.out.println("方法"+entry.getKey()+":"+entry.getValue()+":"+ Math.ceil(entry.getValue()*0.9));
 			methodNameCountTp90.put(entry.getKey(), Math.ceil(entry.getValue()*0.9));
 		}
 		int count = 0;
@@ -42,12 +41,12 @@ public class TP90Listener implements UpdateListener {
 			Double invokeTime = Double.parseDouble(eb.get("invokeTime").toString());
 			if(!methodName.equals(currentMethodName)) {
 				count = 0;
+				currentMethodName = methodName;
 			}
 			count++;
 			if(count >= methodNameCountTp90.get(methodName)) {
 				continue;
 			}
-			//System.out.println(methodName+":"+invokeTime);
 			if(totalTp90.get(methodName)==null) {
 				totalTp90.put(methodName, invokeTime);	
 			}else {
@@ -57,7 +56,6 @@ public class TP90Listener implements UpdateListener {
 		
 		
 		for(Map.Entry<String,Double> entry:totalTp90.entrySet()) {
-			System.out.println(entry.getKey()+"总响应值："+entry.getValue()+"---"+entry.getValue()/methodNameCountTp90.get(entry.getKey()));
 			totalTp90.put(entry.getKey(), entry.getValue()/methodNameCountTp90.get(entry.getKey()));
 		}
 		

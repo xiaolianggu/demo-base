@@ -41,9 +41,10 @@ public class TP99Listener implements UpdateListener {
 			Double invokeTime = Double.parseDouble(eb.get("invokeTime").toString());
 			if(!methodName.equals(currentMethodName)) {
 				count = 0;
+				currentMethodName = methodName;
 			}
 			count++;
-			if(count > methodNameCountTp90.get(methodName)) {
+			if(count >= methodNameCountTp90.get(methodName)) {
 				continue;
 			}
 			if(totalTp90.get(methodName)==null) {

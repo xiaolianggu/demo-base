@@ -29,4 +29,10 @@ public class TPSEvent {
 		this.invokeTime = invokeTime;
 	}
 
+	@Override
+	public String toString() {
+		return "TPSEvent [currentTime=" + currentTime + ", methodName=" + methodName + ", invokeTime=" + invokeTime
+				+ "]";
+	}
+
 }
