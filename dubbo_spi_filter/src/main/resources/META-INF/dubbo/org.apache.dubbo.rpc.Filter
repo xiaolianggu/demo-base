@@ -1,0 +1,3 @@
+timeFilter=com.lagou.filter.DubboInvokeFilter
+transportIPFilter=com.lagou.filter.TransportIPFilter
+tPMonitorFilter=com.lagou.filter.TPMonitorFilter
