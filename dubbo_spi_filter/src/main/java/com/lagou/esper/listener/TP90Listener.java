@@ -12,7 +12,7 @@ import com.espertech.esper.client.UpdateListener;
 import com.lagou.esper.vo.TPSResult;
 
 public class TP90Listener implements UpdateListener {
-	public static final String SQL = "select invokeTime,methodName from TPSEvent.win:time_batch(2 sec) order by methodName,invokeTime asc";
+	public static final String SQL = "select invokeTime,methodName from TPSEvent.win:time_batch(5 sec) order by methodName,invokeTime asc";
     private List<TPSResult> resultList = new ArrayList<TPSResult>();
 	@Override
 	public void update(EventBean[] newEvents, EventBean[] oldEvents) {
@@ -31,7 +31,8 @@ public class TP90Listener implements UpdateListener {
 		}
 		Map<String,Double> methodNameCountTp90 = new HashMap<String,Double>();
 		for(Map.Entry<String,Integer> entry:methodNameCount.entrySet()) {
-			methodNameCountTp90.put(entry.getKey(), entry.getValue()*0.9);
+			System.out.println("方法"+entry.getKey()+":"+entry.getValue()+":"+ Math.ceil(entry.getValue()*0.9));
+			methodNameCountTp90.put(entry.getKey(), Math.ceil(entry.getValue()*0.9));
 		}
 		int count = 0;
 		String currentMethodName = newEvents[0].get("methodName").toString();
@@ -43,9 +44,10 @@ public class TP90Listener implements UpdateListener {
 				count = 0;
 			}
 			count++;
-			if(count > methodNameCountTp90.get(methodName)) {
+			if(count >= methodNameCountTp90.get(methodName)) {
 				continue;
 			}
+			//System.out.println(methodName+":"+invokeTime);
 			if(totalTp90.get(methodName)==null) {
 				totalTp90.put(methodName, invokeTime);	
 			}else {
@@ -55,6 +57,7 @@ public class TP90Listener implements UpdateListener {
 		
 		
 		for(Map.Entry<String,Double> entry:totalTp90.entrySet()) {
+			System.out.println(entry.getKey()+"总响应值："+entry.getValue()+"---"+entry.getValue()/methodNameCountTp90.get(entry.getKey()));
 			totalTp90.put(entry.getKey(), entry.getValue()/methodNameCountTp90.get(entry.getKey()));
 		}
 		

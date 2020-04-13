@@ -12,7 +12,7 @@ import com.espertech.esper.client.UpdateListener;
 import com.lagou.esper.vo.TPSResult;
 
 public class TP99Listener implements UpdateListener {
-	public static final String SQL = "select invokeTime,methodName from TPSEvent.win:time_batch(2 sec) order by methodName,invokeTime asc";
+	public static final String SQL = "select invokeTime,methodName from TPSEvent.win:time_batch(5 sec) order by methodName,invokeTime asc";
     private List<TPSResult> resultList = new ArrayList<TPSResult>();
 	@Override
 	public void update(EventBean[] newEvents, EventBean[] oldEvents) {
@@ -31,7 +31,7 @@ public class TP99Listener implements UpdateListener {
 		}
 		Map<String,Double> methodNameCountTp90 = new HashMap<String,Double>();
 		for(Map.Entry<String,Integer> entry:methodNameCount.entrySet()) {
-			methodNameCountTp90.put(entry.getKey(), entry.getValue()*0.99);
+			methodNameCountTp90.put(entry.getKey(), Math.ceil(entry.getValue()*0.99));
 		}
 		int count = 0;
 		String currentMethodName = newEvents[0].get("methodName").toString();
